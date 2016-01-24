@@ -7,9 +7,12 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css' }}"/>
         <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-theme.min.css' }}"/>
+        
     </head>
     <body>
         {% block body %}{% endblock %}
+        
+        <script type="text/javascript" src="{{ asset('js/jquery-1.12.0.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
