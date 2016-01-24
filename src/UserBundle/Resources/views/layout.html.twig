@@ -4,12 +4,12 @@
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css' }}"/>
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-theme.min.css' }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-theme.min.css') }}"/>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <div>
+        <!-- div>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
                 <a href="{{ path('fos_user_security_logout') }}">
@@ -18,7 +18,7 @@
             {% else %}
                 <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
-        </div>
+        </div -->
 
         {% if app.request.hasPreviousSession %}
             {% for type, messages in app.session.flashbag.all() %}
@@ -30,7 +30,7 @@
             {% endfor %}
         {% endif %}
 
-        <div>
+        <div id="fos">
             {% block fos_user_content %}
             {% endblock fos_user_content %}
         </div>
