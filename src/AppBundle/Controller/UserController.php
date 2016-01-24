@@ -22,7 +22,7 @@ class UserController extends Controller
      *
      * @Route("/", name="user")
      * @Method("GET")
-     * @Template()
+     * @Template("User/index.html.twig")
      */
     public function indexAction()
     {
@@ -40,7 +40,7 @@ class UserController extends Controller
      *
      * @Route("/{id}", name="user_show")
      * @Method("GET")
-     * @Template()
+     * @Template("User/show.html.twig")
      */
     public function showAction($id)
     {
