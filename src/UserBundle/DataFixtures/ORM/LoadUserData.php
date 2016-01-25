@@ -5,9 +5,33 @@ namespace UserBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 class LoadUserData implements FixtureInterface, ContainerAwareInterface
 {
+	
+	/**
+	 * 
+	 * @var Container
+	 */
+	private $container;
+	
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Symfony\Component\DependencyInjection\ContainerAwareInterface::setContainer()
+	 */
+	public function setContainer(ContainerInterface $container = null)
+	{
+		$this->container = $container;
+		
+		return $this;
+	}
+
+	
+	
 	public function load(ObjectManager $manager)
 	{
 		$userManager = $this->container->get('fos_user.user_manager');
