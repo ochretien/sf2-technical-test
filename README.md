@@ -1,5 +1,21 @@
 # StadLine Technical Test
 
+### Installation
+
+Après installation du projet, lancer les commandes :
+
+1. `app/console doc:mig:mig`
+2. `app/console doc:fix:load`
+    
+### Temps passé
+
+* Temps écoulé en développement réel : environ 3h00
+* Temps écoulé au total : environ 10h00
+
+### Blocage
+
+Je me suis retrouvé bloqué par l'api git. En effet malgré de oongues heures de recherches, je n'ai jamais réussi à exploiter la réponse renvoyée par celle-ci. Je livre donc à mon grand regret une application non fonctionnelle car il n'y a aucune validation de l'existence du user git, ni du repository que l'on commente.
+
 ### Tache
 
 Le sujet de base est simple : Il faut créer une page sécurisée qui permet à un utilisateur de se loguer et de faire un commentaire sur un dépôt publique d'un utilisateur GitHub.
