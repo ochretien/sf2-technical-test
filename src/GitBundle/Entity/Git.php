@@ -23,8 +23,9 @@ class Git
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="author", type="integer")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="galerie", referencedColumnName="id")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $author;
 

@@ -15,9 +15,7 @@ class GitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('author')
-            ->add('date')
-            ->add('repositoryOwner')
+            ->add('repositoryOwner', 'hidden')
             ->add('repository')
             ->add('comment')
         ;

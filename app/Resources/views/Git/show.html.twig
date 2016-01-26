@@ -1,48 +1,21 @@
-{% extends '::base.html.twig' %}
+<h1>Commentaires sur les repo de {{ gitUser }}</h1>
 
-{% block body -%}
-    <h1>Comment</h1>
-
-    <table class="record_properties">
-        <tbody>
+<table class="table table-striped">
+	<tbody>
+		{% for entity in entities %}
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <td class="col-lg-2">
+                	<strong># {{ entity.id }}</strong><br/>
+                	par {{ entity.author }}<br/>
+                	le {{ entity.date | date('d/m/Y') }}<br/>
+                	à {{ entity.date | date('H:i:s') }}
+                </td>
+                
+                <td class="col-lg-10">
+                	<strong>{{ entity.repository }}</strong><br/>
+                	{{ entity.comment }}
+                </td>
             </tr>
-            <tr>
-                <th>Author</th>
-                <td>{{ entity.author }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Repositoryowner</th>
-                <td>{{ entity.repositoryOwner }}</td>
-            </tr>
-            <tr>
-                <th>Repository</th>
-                <td>{{ entity.repository }}</td>
-            </tr>
-            <tr>
-                <th>Comment</th>
-                <td>{{ entity.comment }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('git_index') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('git_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+		{% endfor %}
+    </tbody>
+</table>

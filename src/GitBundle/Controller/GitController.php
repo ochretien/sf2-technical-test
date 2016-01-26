@@ -27,14 +27,32 @@ class GitController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('GitBundle:Git')->findAll();
-
+        $user = $this->getUser();
+        
         return array(
-            'entities' => $entities,
+            'user' => $user,
         );
     }
+    
+    /**
+     * Validates git user exists.
+     *
+     * @Route("/validate", name="git_validate")
+     * @Method("POST")
+     * @Template("Git/index.html.twig")
+     */
+    public function validationAction(Request $request)
+    {
+    	if($request)
+    	{
+    		$gitUser = $request->get('gitUser');
+    		
+	    	return $this->redirect($this->generateUrl('git_comment', array('username' => $gitUser)));
+    	}
+    	
+    	return $this->redirect($this->generateUrl('git_index', array('error' => true)));
+    }
+    
     /**
      * Creates a new Git entity.
      *
@@ -50,10 +68,16 @@ class GitController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $date = new \DateTime('NOW');
+            
+            $entity->setDate($date);
+            $entity->setAuthor($this->getUser());
+            
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('git_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('git_comment', array('username' => $entity->getRepositoryOwner())));
         }
 
         return array(
@@ -84,13 +108,15 @@ class GitController extends Controller
     /**
      * Displays a form to create a new Git entity.
      *
-     * @Route("/new", name="git_new")
+     * @Route("/{username}/comment", name="git_comment")
      * @Method("GET")
      * @Template("Git/new.html.twig")
      */
-    public function newAction()
+    public function commentAction($username)
     {
         $entity = new Git();
+        $entity->setRepositoryOwner($username);
+        
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -102,25 +128,23 @@ class GitController extends Controller
     /**
      * Finds and displays a Git entity.
      *
-     * @Route("/{id}", name="git_show")
+     * @Route("/{gitUser}", name="git_show")
      * @Method("GET")
      * @Template("Git/show.html.twig")
      */
-    public function showAction($id)
+    public function showAction($gitUser)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('GitBundle:Git')->find($id);
+        $entities = $em->getRepository('GitBundle:Git')->getByGitUser($gitUser);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Git entity.');
+        if (!$entities) {
+            throw $this->createNotFoundException('Unable to find Git entities.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entities'      => $entities,
+        	'gitUser'       => $gitUser
         );
     }
 
@@ -174,7 +198,7 @@ class GitController extends Controller
      *
      * @Route("/{id}", name="git_update")
      * @Method("PUT")
-     * @Template(""Git/edit.html.twig"")
+     * @Template("Git/edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -202,6 +226,7 @@ class GitController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
     /**
      * Deletes a Git entity.
      *
@@ -227,7 +252,7 @@ class GitController extends Controller
 
         return $this->redirect($this->generateUrl('git_index'));
     }
-
+    
     /**
      * Creates a form to delete a Git entity by id.
      *
@@ -237,11 +262,11 @@ class GitController extends Controller
      */
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+    	return $this->createFormBuilder()
+    		->setAction($this->generateUrl('git_delete', array('id' => $id)))
+    		->setMethod('DELETE')
+    		->add('submit', 'submit', array('label' => 'Delete'))
+    		->getForm()
+    	;
     }
 }

@@ -1,49 +1,36 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Git list</h1>
+    <h4>Bonjour {{ user.username | capitalize }} !</h4>
+    
+	{% if app.request.get('error') is defined and app.request.get('error') %}
+		<div class="alert alert-danger">Aucune correspondance trouvée</div>
+	{% endif %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Author</th>
-                <th>Date</th>
-                <th>Repositoryowner</th>
-                <th>Repository</th>
-                <th>Comment</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('git_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.author }}</td>
-                <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.repositoryOwner }}</td>
-                <td>{{ entity.repository }}</td>
-                <td>{{ entity.git }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('git_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('git_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <form action="{{ path('git_validate') }}" method="post" class="col-lg-4 col-lg-offset-4">
+    	<div class="form-group">
+    		<label for="gitUser">Saisissez le nom d'un utilisateur Git</label>
+    		<input type="text" name="gitUser" id="gitUser" class="form-control" placeholder="Identifiant"/>
+    	</div>
+    	
+    	<button type="submit" class="btn btn-success pull-right">Valider</button>
+    </form>
+{% endblock %}
 
-        <ul>
-        <li>
-            <a href="{{ path('git_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block javascripts %}
+	<script>
+		$('#gitUser').keyup(function() {
+
+			var response = $.ajax({
+				type: 'GET',
+				url: 'https://api.github.com/search/users',
+				data: {
+					q: $('#gitUser').val()	
+				},
+				dataType: 'json'
+			});
+
+			console.log(response['items']);
+		});
+	</script>
+{% endblock %}

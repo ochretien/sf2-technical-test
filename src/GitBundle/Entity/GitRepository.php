@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class GitRepository extends EntityRepository
 {
+	public function getByGitUser($gitUser)
+	{
+		$query = $this->createQueryBuilder('c')
+			->where('c.repositoryOwner = :repositoryOwner')
+			->setParameter('repositoryOwner', $gitUser)
+		;
+		
+		return $query->getQuery()->getResult();
+	}
 }
